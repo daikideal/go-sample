@@ -1,0 +1,8 @@
+version: '3'
+
+services: 
+  api:
+    build: ./api
+    tty: true
+    volumes:
+      - ./api:/go/src/go-sample
