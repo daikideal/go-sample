@@ -12,8 +12,12 @@ func hello(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(`{"message":"Hello World!"}`))
 }
 
-func main() {
+func handleRequests() {
 	http.HandleFunc("/", hello)
-	fmt.Println("Server started.")
 	log.Fatal(http.ListenAndServe(":8080", nil))
+}
+
+func main() {
+	fmt.Println("Server started.")
+	handleRequests()
 }
