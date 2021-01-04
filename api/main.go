@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"encoding/json"
+	"github.com/gorilla/mux"
 )
 
 type Article struct {
@@ -34,13 +35,14 @@ func hello(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleRequests() {
-	http.HandleFunc("/", hello)
-	http.HandleFunc("/articles", returnArticles)
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	r := mux.NewRouter().StrictSlash(true)
+	r.HandleFunc("/", hello)
+	r.HandleFunc("/articles", returnArticles)
+	log.Fatal(http.ListenAndServe(":8080", r))
 }
 
 func main() {
-	fmt.Println("Server started.")
+	fmt.Println("Rest API v1.8 - Mux Routers")
 	createDemoArticles()
 	handleRequests()
 }
