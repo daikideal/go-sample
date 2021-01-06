@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"strconv"
 	"net/http"
 	"encoding/json"
 	"github.com/gorilla/mux"
@@ -28,6 +29,20 @@ func returnArticles(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(Articles)
 }
 
+func returnArticle(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	key, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		http.Error(w, "Invalid Article Id", http.StatusBadRequest)
+	}
+
+	for _, article := range Articles {
+		if article.Id == key {
+			json.NewEncoder(w).Encode(article)
+		}
+	}
+}
+
 func hello(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
@@ -38,6 +53,7 @@ func handleRequests() {
 	r := mux.NewRouter().StrictSlash(true)
 	r.HandleFunc("/", hello)
 	r.HandleFunc("/articles", returnArticles)
+	r.HandleFunc("/articles/{id}", returnArticle)
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
 
