@@ -43,6 +43,15 @@ func returnArticle(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func createArticle(w http.ResponseWriter, r *http.Request) {
+	var article Article
+
+	json.NewDecoder(r.Body).Decode(&article)
+	Articles = append(Articles, article)
+
+	json.NewEncoder(w).Encode(article)
+}
+
 func hello(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
@@ -52,6 +61,7 @@ func hello(w http.ResponseWriter, r *http.Request) {
 func handleRequests() {
 	r := mux.NewRouter().StrictSlash(true)
 	r.HandleFunc("/", hello)
+	r.HandleFunc("/articles", createArticle).Methods("POST")
 	r.HandleFunc("/articles", returnArticles)
 	r.HandleFunc("/articles/{id}", returnArticle)
 	log.Fatal(http.ListenAndServe(":8080", r))
