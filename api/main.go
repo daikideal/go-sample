@@ -52,6 +52,24 @@ func createArticle(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(article)
 }
 
+func updateArticle(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	key, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		http.Error(w, "Invalid Article Id", http.StatusBadRequest)
+	}
+
+	var updateArticle Article
+	json.NewDecoder(r.Body).Decode(&updateArticle)
+
+	for index, article := range Articles {
+		if article.Id == key {
+			Articles[index] = updateArticle
+			json.NewEncoder(w).Encode(updateArticle)
+		}
+	}
+}
+
 func deleteArticle(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	key, err := strconv.Atoi(vars["id"])
@@ -78,6 +96,7 @@ func handleRequests() {
 	r.HandleFunc("/", hello)
 	r.HandleFunc("/articles", createArticle).Methods("POST")
 	r.HandleFunc("/articles", returnArticles)
+	r.HandleFunc("/articles/{id}", updateArticle).Methods("PUT")
 	r.HandleFunc("/articles/{id}", deleteArticle).Methods("DELETE")
 	r.HandleFunc("/articles/{id}", returnArticle)
 	log.Fatal(http.ListenAndServe(":8080", r))
