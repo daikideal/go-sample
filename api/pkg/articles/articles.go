@@ -28,6 +28,7 @@ func createDemoArticles() {
 }
 
 func ReturnArticles(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(Articles)
 }
 
@@ -40,6 +41,7 @@ func ReturnArticle(w http.ResponseWriter, r *http.Request) {
 
 	for _, article := range Articles {
 		if article.Id == key {
+			w.Header().Set("Content-Type", "application/json")
 			json.NewEncoder(w).Encode(article)
 		}
 	}
@@ -51,6 +53,7 @@ func CreateArticle(w http.ResponseWriter, r *http.Request) {
 	json.NewDecoder(r.Body).Decode(&article)
 	Articles = append(Articles, article)
 
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(article)
 }
 
@@ -67,6 +70,7 @@ func UpdateArticle(w http.ResponseWriter, r *http.Request) {
 	for index, article := range Articles {
 		if article.Id == key {
 			Articles[index] = updateArticle
+			w.Header().Set("Content-Type", "application/json")
 			json.NewEncoder(w).Encode(updateArticle)
 		}
 	}
@@ -82,6 +86,7 @@ func DeleteArticle(w http.ResponseWriter, r *http.Request) {
 	for index, article := range Articles {
 		if article.Id == key {
 			Articles = append(Articles[:index], Articles[index+1:]...)
+			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusNoContent)
 		}
 	}
