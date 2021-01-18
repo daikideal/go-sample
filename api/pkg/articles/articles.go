@@ -1,16 +1,17 @@
 package articles
 
 import (
-	"strconv"
-	"net/http"
 	"encoding/json"
+	"net/http"
+	"strconv"
+
 	"github.com/gorilla/mux"
 )
 
 type Article struct {
-	Id int `json:"id"`
-	Title	string `json:"title"`
-	Desc string `json:"desc"`
+	Id      int    `json:"id"`
+	Title   string `json:"title"`
+	Desc    string `json:"desc"`
 	Content string `json:"content"`
 }
 
