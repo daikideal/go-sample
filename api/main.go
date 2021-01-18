@@ -4,6 +4,10 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
+
+	"go-sample/pkg/articles"
 )
 
 func hello(w http.ResponseWriter, r *http.Request) {
@@ -13,11 +17,17 @@ func hello(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleRequests() {
-	http.HandleFunc("/", hello)
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	r := mux.NewRouter().StrictSlash(true)
+	r.HandleFunc("/", hello)
+	r.HandleFunc("/articles", articles.CreateArticle).Methods("POST")
+	r.HandleFunc("/articles", articles.ReturnArticles)
+	r.HandleFunc("/articles/{id}", articles.UpdateArticle).Methods("PUT")
+	r.HandleFunc("/articles/{id}", articles.DeleteArticle).Methods("DELETE")
+	r.HandleFunc("/articles/{id}", articles.ReturnArticle)
+	log.Fatal(http.ListenAndServe(":8080", r))
 }
 
 func main() {
-	fmt.Println("Server started.")
+	fmt.Println("Rest API v1.8 - Mux Routers")
 	handleRequests()
 }
