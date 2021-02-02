@@ -1,4 +1,4 @@
-module go-sample
+module github.com/daikideal/go-sample
 
 go 1.15
 
