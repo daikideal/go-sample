@@ -7,7 +7,7 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"go-sample/pkg/articles"
+	"github.com/daikideal/go-sample/pkg/articles"
 )
 
 func hello(w http.ResponseWriter, r *http.Request) {
